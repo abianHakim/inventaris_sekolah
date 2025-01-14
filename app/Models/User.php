@@ -17,10 +17,15 @@ class User extends Authenticatable
      *
      * @var list<string>
      */
+    protected $primaryKey = 'user_id';
+    protected $keyType = 'string';
+    protected $table = "tm_user";
     protected $fillable = [
-        'name',
-        'email',
-        'password',
+        'user_id',
+        'user_name',
+        'user_pass',
+        'user_hak',
+        'user_sts',
     ];
 
     /**
@@ -29,8 +34,8 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $hidden = [
-        'password',
-        'remember_token',
+        'user_pass',
+        // 'remember_token',
     ];
 
     /**
@@ -41,8 +46,19 @@ class User extends Authenticatable
     protected function casts(): array
     {
         return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
+            // 'email_verified_at' => 'datetime',
+            'user_pass' => 'hashed',
         ];
+    }
+
+    public function peminjaman()
+    {
+        return $this->hasMany(tm_peminjaman::class, 'user_id', 'user_id');
+    }
+
+    // Relasi ke Pengembalian
+    public function pengembalian()
+    {
+        return $this->hasMany(tm_pengembalian::class, 'user_id', 'user_id');
     }
 }

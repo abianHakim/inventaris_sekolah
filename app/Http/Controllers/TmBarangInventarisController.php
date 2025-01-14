@@ -13,7 +13,12 @@ class TmBarangInventarisController extends Controller
      */
     public function index()
     {
-        //
+        return view("super_user.barang_inventaris.dbarang");
+    }
+
+    public function showpenerimaan()
+    {
+        return view("super_user.barang_inventaris.pbarang");
     }
 
     /**

@@ -20,6 +20,9 @@
     <!-- Custom styles for this template-->
     <link href="{{ asset('assets') }}/css/sb-admin-2.min.css" rel="stylesheet">
 
+
+    @stack('style')
+
 </head>
 
 <body id="page-top">
@@ -58,8 +61,8 @@
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Halaman</h6>
-                        <a class="collapse-item" href="#">Daftar Barang</a>
-                        <a class="collapse-item" href="#">Penerimaan Barang</a>
+                        <a class="collapse-item" href="{{ route('dbarang') }}">Daftar Barang</a>
+                        <a class="collapse-item" href="{{ route('pbarang') }}">Penerimaan Barang</a>
                     </div>
                 </div>
             </li>
@@ -101,7 +104,7 @@
                 </div>
             </li>
 
-       
+
 
             <!-- Divider -->
             <hr class="sidebar-divider">
@@ -323,6 +326,8 @@
     <!-- Page level custom scripts -->
     <script src="{{ asset('assets') }}/js/demo/chart-area-demo.js"></script>
     <script src="{{ asset('assets') }}/js/demo/chart-pie-demo.js"></script>
+
+    @stack('script')
 
 </body>
 
