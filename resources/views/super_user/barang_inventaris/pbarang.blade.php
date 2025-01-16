@@ -19,17 +19,16 @@
                     <label for="jns_brg_kode">Jenis Barang</label>
                     <select name="jns_brg_kode" id="jns_brg_kode" class="form-control">
                         <option value="">-- Pilih Jenis Barang --</option>
-                        {{-- @foreach ($jenisBarang as $jenis)
+                        @foreach ($jenisBarang as $jenis)
                             <option value="{{ $jenis->jns_brg_kode }}">{{ $jenis->jns_brg_kode }} -
                                 {{ $jenis->jns_brg_nama }}</option>
-                        @endforeach --}}
+                        @endforeach
                     </select>
                 </div>
                 <div class="form-group">
                     <label for="user_id">User</label>
-                    <select name="user_id" id="user_id" class="form-control">
-                        {{-- <option value="{{ auth()->user()->user_id }}">{{ auth()->user()->user_name }}</option>s --}}
-                    </select>
+                    <input type="text" name="user_id" id="user_id" class="form-control"
+                        value="{{ auth()->user()->user_name }}" readonly>
                 </div>
                 <div class="form-group">
                     <label for="br_nama">Nama Barang</label>

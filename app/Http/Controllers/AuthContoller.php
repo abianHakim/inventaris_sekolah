@@ -40,7 +40,7 @@ class AuthContoller extends Controller
             // dd('test');
             Auth::login($user);
 
-            return redirect('superhome')->with('success', 'Login berhasil!');
+            return redirect('super-user/superhome')->with('success', 'Login berhasil!');
         }
 
 
@@ -79,10 +79,12 @@ class AuthContoller extends Controller
 
     public function logout(Request $request)
     {
+        // Logout user and invalidate session
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect('login');
+        // Clear URL cache and force redirect to login
+        return redirect()->route('login');
     }
 }

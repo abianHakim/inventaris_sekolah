@@ -14,45 +14,48 @@
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                     <thead>
                         <tr>
-                            <th>Name</th>
-                            <th>Position</th>
-                            <th>Office</th>
-                            <th>Age</th>
+                            <th>kode</th>
+                            <th>Jenis Barang</th>
+                            <th>User id</th>
+                            <th>Nama Barang</th>
+                            <th>Tanggal Terima</th>
+                            <th>Tanggal Entry</th>
+                            <th>Status</th>
+                            <th>Aksi</th>
 
                         </tr>
                     </thead>
-                    <tfoot>
-                        <tr>
-                            <th>Name</th>
-                            <th>Position</th>
-                            <th>Office</th>
-                            <th>Age</th>
 
-                        </tr>
-                    </tfoot>
                     <tbody>
-                        <tr>
-                            <td>Airi Satou</td>
-                            <td>Accountant</td>
-                            <td>Tokyo</td>
-                            <td>33</td>
+                        @foreach ($barangInventaris as $barang)
+                            <tr>
+                                <td>{{ $barang->br_kode }}</td>
+                                <td>{{ $barang->jenisbarang->jns_brg_nama ?? '-' }} ({{ $barang->jns_brg_kode }})</td>
+                                <td>{{ $barang->user_id }}</td>
+                                <td>{{ $barang->br_nama }}</td>
+                                <td>{{ $barang->br_tgl_terima }}</td>
+                                <td>{{ $barang->br_tgl_entry }}</td>
+                                <td>{{ $barang->br_status }}</td>
+                                <td>
+                                    {{-- <a href="{{ route('barangInventaris.edit', $barang->br_kode) }}" --}}
+                                    <a href="#" class="btn btn-warning btn-circle">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    {{-- <form action="{{ route('barangInventaris.destroy', $barang->br_kode) }}" method="POST" --}}
+                                    <form action="#" method="POST" class="d-inline">
+                                        @csrf
+                                        @method('delete')
+                                        <button type="submit" class="btn btn-danger btn-circle">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </form>
+                                </td>
 
-                        </tr>
-                        <tr>
-                            <td>Angelica Ramos</td>
-                            <td>Chief Executive Officer (CEO)</td>
-                            <td>London</td>
-                            <td>47</td>
-                            
-                        </tr>
-                        <tr>
-                            <td>Ashton Cox</td>
-                            <td>Junior Technical Author</td>
-                            <td>San Francisco</td>
-                            <td>66</td>
-                            
-                        </tr>
+                            </tr>
+                        @endforeach
                     </tbody>
+
+
                 </table>
             </div>
         </div>

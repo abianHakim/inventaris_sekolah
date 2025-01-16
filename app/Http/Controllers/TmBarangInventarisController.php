@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\tm_barang_inventaris;
 use App\Http\Requests\Storetm_barang_inventarisRequest;
 use App\Http\Requests\Updatetm_barang_inventarisRequest;
+use App\Models\tr_jenis_barang;
 
 class TmBarangInventarisController extends Controller
 {
@@ -13,12 +14,14 @@ class TmBarangInventarisController extends Controller
      */
     public function index()
     {
-        return view("super_user.barang_inventaris.dbarang");
+        $data["barangInventaris"] = Tm_barang_inventaris::all();
+        return view("super_user.barang_inventaris.dbarang")->with($data);
     }
 
     public function showpenerimaan()
     {
-        return view("super_user.barang_inventaris.pbarang");
+        $data["jenisBarang"] = tr_jenis_barang::all();
+        return view("super_user.barang_inventaris.pbarang")->with($data);
     }
 
     /**
