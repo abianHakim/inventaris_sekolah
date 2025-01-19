@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
-class AuthContoller extends Controller
+class AuthController extends Controller
 {
     public function index()
     {
@@ -40,7 +40,7 @@ class AuthContoller extends Controller
             // dd('test');
             Auth::login($user);
 
-            return redirect('super-user/superhome')->with('success', 'Login berhasil!');
+            return redirect('superhome')->with('success', 'Login berhasil!');
         }
 
 
@@ -84,7 +84,7 @@ class AuthContoller extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        // Clear URL cache and force redirect to login
-        return redirect()->route('login');
+        logger('User logged out successfully.');
+        return redirect()->route('showlogin');
     }
 }

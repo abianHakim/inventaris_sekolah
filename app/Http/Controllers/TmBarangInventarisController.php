@@ -6,6 +6,7 @@ use App\Models\tm_barang_inventaris;
 use App\Http\Requests\Storetm_barang_inventarisRequest;
 use App\Http\Requests\Updatetm_barang_inventarisRequest;
 use App\Models\tr_jenis_barang;
+use Illuminate\Http\Request;
 
 class TmBarangInventarisController extends Controller
 {
@@ -35,10 +36,7 @@ class TmBarangInventarisController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Storetm_barang_inventarisRequest $request)
-    {
-        //
-    }
+    public function store(Request $request) {}
 
     /**
      * Display the specified resource.

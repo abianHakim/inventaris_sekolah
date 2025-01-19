@@ -41,7 +41,11 @@
                 </div>
                 <div class="form-group">
                     <label for="br_status">Status Barang</label>
-                    <input type="text" name="br_status" id="br_status" class="form-control" maxlength="2">
+                    <select name="br_status" id="br_status" class="form-control">
+                        <option value="">-- Pilih Status Barang --</option>
+                        <option value="0">0 - Tidak AKtif</option>
+                        <option value="1">1 - Aktif</option>
+                    </select>
                 </div>
                 <button type="submit" class="btn btn-primary">Kirim</button>
             </form>

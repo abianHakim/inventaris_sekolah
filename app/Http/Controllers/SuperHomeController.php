@@ -9,10 +9,10 @@ class SuperHomeController extends Controller
 {
     public function index()
     {
-        return view("super_user.home");
+        return view("superhome");
     }
 
-    public function jumlahBarang()
+    public function indexhome()
     {
         $jumlahBarang = tm_barang_inventaris::count();
 

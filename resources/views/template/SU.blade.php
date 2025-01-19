@@ -34,8 +34,7 @@
         <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
             <!-- Sidebar - Brand -->
-            <a class="sidebar-brand d-flex align-items-center justify-content-center"
-                href="{{ Route('superuser.superhome') }}">
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ Route('superhome') }}">
                 <div class="sidebar-brand-icon rotate-n-15">
                     <i class="fas fa-laugh-wink"></i>
                 </div>
@@ -47,7 +46,7 @@
 
             <!-- Nav Item - Dashboard -->
             <li class="nav-item active">
-                <a class="nav-link" href="{{ route('superuser.superhome') }}">
+                <a class="nav-link" href="{{ route('superhome') }}">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Home</span></a>
             </li>
@@ -62,8 +61,8 @@
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Halaman</h6>
-                        <a class="collapse-item" href="{{ route('superuser.dbarang') }}">Daftar Barang</a>
-                        <a class="collapse-item" href="{{ route('superuser.pbarang') }}">Penerimaan Barang</a>
+                        <a class="collapse-item" href="{{ route('dbarang') }}">Daftar Barang</a>
+                        <a class="collapse-item" href="{{ route('pbarang') }}">Penerimaan Barang</a>
                     </div>
                 </div>
             </li>
@@ -102,7 +101,7 @@
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Halaman</h6>
-                        <a class="collapse-item" href="{{ route('superuser.jbarang') }}">Jenis Barnag</a>
+                        <a class="collapse-item" href="{{ route('jbarang') }}">Jenis Barnag</a>
                         <a class="collapse-item" href="#">Daftar Pengguna</a>
                     </div>
                 </div>
@@ -256,9 +255,7 @@
                                     Activity Log
                                 </a>
                                 <div class="dropdown-divider"></div>
-                                <form action="{{ route('logout') }}" method="POST">
-                                    @csrf
-                                </form>
+
                                 <a class="dropdown-item" href="#" data-toggle="modal"
                                     data-target="#logoutModal">
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
@@ -348,20 +345,37 @@
 
 
 <!-- Logout Modal-->
-<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="logoutModalLabel"
     aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
-                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content shadow-lg rounded">
+            <!-- Header -->
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title" id="logoutModalLabel">
+                    Konfirmasi Logout
+                </h5>
+                <button class="close text-white" type="button" data-dismiss="modal" aria-label="Tutup">
+                    <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body">Select " Logout" below if you are ready to end your current session.</div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                <a class="btn btn-primary" href="login.html">Logout</a>
+            <!-- Body -->
+            <div class="modal-body text-center">
+                <p class="mb-3 font-weight-bold text-dark">
+                    Pastikan semua data barang inventaris telah diperbarui
+                    sebelum logout.
+                </p>
+            </div>
+            <!-- Footer -->
+            <div class="modal-footer justify-content-center">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">
+                    Batal
+                </button>
+                <form action="{{ route('logout') }}" method="POST">
+                    @csrf
+                    <button type="submit" class="btn btn-danger">
+                        Logout
+                    </button>
+                </form>
             </div>
         </div>
     </div>
