@@ -28,3 +28,5 @@ Route::get('superpbarang', [TmBarangInventarisController::class, 'showpenerimaan
 //jenis barang
 Route::get('superjbarang', [TrJenisBarangController::class, 'showindex'])->name('jbarang');
 Route::post('superjbarang', [TrJenisBarangController::class, 'store'])->name('jbarang.store');
+Route::patch('superjbarang/{jns_brg_kode}', [TrJenisBarangController::class, 'update'])->name('jbarang.update');
+Route::delete('superjbarang/{jns_brg_kode}', [TrJenisBarangController::class, 'destroy'])->name('jbarang.destroy');

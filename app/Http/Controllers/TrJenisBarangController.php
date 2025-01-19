@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\tr_jenis_barang;
 use Illuminate\Http\Request;
+use App\Models\tr_jenis_barang;
 
 class TrJenisBarangController extends Controller
 {
@@ -42,7 +42,7 @@ class TrJenisBarangController extends Controller
             'jns_brg_nama' => $request->jns_brg_nama,
         ]);
 
-        return redirect('super-user/superjbarang')->with('success', 'Data Jenis Barang Berhasil Ditambahkan!');
+        return redirect('superjbarang')->with('success', 'Data Jenis Barang Berhasil Ditambahkan!');
     }
 
     /**
@@ -64,25 +64,45 @@ class TrJenisBarangController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, tr_jenis_barang $tr_jenis_barang)
+    // public function update(Request $request, tr_jenis_barang $tr_jenis_barang)
+    // {
+    //     $validatedData = $request->validate([
+    //         'jns_brg_kode' => 'required|unique:tr_jenis_barang,jns_brg_kode,' . $tr_jenis_barang->id,
+    //         'jns_brg_nama' => 'required',
+    //     ]);
+
+    //     $tr_jenis_barang->update($validatedData);
+
+    //     return redirect('superjbarang')->with('success', 'Data Jenis Barang Berhasil Diubah!');
+    // }
+
+    public function update(Request $request, $jns_brg_kode)
     {
+        // Mencari data barang berdasarkan kode
+        $tr_jenis_barang = tr_jenis_barang::where('jns_brg_kode', $jns_brg_kode)->firstOrFail();
+
+        // Validasi input
         $validatedData = $request->validate([
-            'jns_brg_kode' => 'required|unique:tr_jenis_barang,jns_brg_kode,' . $tr_jenis_barang->id,
             'jns_brg_nama' => 'required',
         ]);
 
+        // Update data
         $tr_jenis_barang->update($validatedData);
 
-        return redirect('super-user/jbarang')->with('success', 'Data Jenis Barang Berhasil Diubah!');
+        return redirect('superjbarang')->with('success', 'Data Jenis Barang Berhasil Diubah!');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Request $request, tr_jenis_barang $tr_jenis_barang)
+    public function destroy(Request $request, $jns_brg_kode)
     {
+        // Mencari data barang berdasarkan kode
+        $tr_jenis_barang = tr_jenis_barang::where('jns_brg_kode', $jns_brg_kode)->firstOrFail();
+
+        // Hapus data
         $tr_jenis_barang->delete();
 
-        return redirect('super-user/jbarang')->with('success', 'Data Jenis Barang Berhasil Dihapus!');
+        return redirect('superjbarang')->with('success', 'Data Jenis Barang Berhasil Dihapus!');
     }
 }
