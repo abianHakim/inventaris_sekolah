@@ -14,6 +14,11 @@ class tm_barang_inventaris extends Model
     protected $primaryKey = 'br_kode'; // Primary key
     public $incrementing = false; // Jika primary key bukan auto-increment
     protected $keyType = 'string'; // Tipe primary key
+    public function getStatusLabelAttribute()
+    {
+        // Pastikan kolom br_status ada di database dan diakses dengan benar
+        return $this->br_status == 1 ? 'Tersedia' : 'Tidak Tersedia';
+    }
 
     protected $fillable = [
         'br_kode',

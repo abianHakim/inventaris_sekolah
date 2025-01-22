@@ -86,8 +86,8 @@
                                     <form action="{{ route('jbarang.destroy', ['jns_brg_kode' => $barang->jns_brg_kode]) }}"
                                         method="POST" style="display: inline-block;">
                                         @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class=" delete-btn btn btn-danger btn-sm custom-btn">
+                                        @method('DELETE') <!-- Pastikan ini ada -->
+                                        <button type="submit" class="delete-btn btn btn-danger btn-sm custom-btn">
                                             <i class="fas fa-trash-alt"></i> Delete
                                         </button>
                                     </form>
@@ -149,6 +149,9 @@
                 e.preventDefault();
 
                 let form = $(this).closest('form');
+                let kode = form.find('input[name="jns_brg_kode"]').val(); // Ambil kode dari form
+
+                // Pengecekan dengan SweetAlert
                 Swal.fire({
                     title: 'Apakah Anda yakin?',
                     text: 'Data yang dihapus tidak dapat dikembalikan!',
@@ -159,7 +162,35 @@
                     confirmButtonText: 'Hapus!'
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        form.submit();
+                        // Kirim permintaan ajax untuk memeriksa ketergantungan
+                        $.ajax({
+                            url: '/check-barang-terkait/' +
+                            kode, // URL endpoint untuk pengecekan barang terkait
+                            method: 'GET',
+                            success: function(response) {
+                                if (response.barangTerkait) {
+                                    // Jika ada barang yang terkait, tampilkan pesan error
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Gagal!',
+                                        text: 'Jenis Barang ini tidak dapat dihapus karena ada barang yang terkait.',
+                                        timer: 3000,
+                                        showConfirmButton: false
+                                    });
+                                } else {
+                                    // Jika tidak ada barang yang terkait, lanjutkan submit form
+                                    form.submit();
+                                }
+                            },
+                            error: function(xhr, status, error) {
+                                // Tangani error jika permintaan ajax gagal
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Terjadi Kesalahan!',
+                                    text: 'Gagal memproses permintaan.',
+                                });
+                            }
+                        });
                     }
                 });
             });
@@ -207,6 +238,17 @@
                     title: 'Berhasil!',
                     text: '{{ session('success') }}',
                     timer: 1500,
+                    showConfirmButton: false
+                });
+            @endif
+
+            // SweetAlert untuk notifikasi error jika ada masalah dalam penghapusan
+            @if (session('error'))
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Gagal!',
+                    text: '{{ session('error') }}',
+                    timer: 3000,
                     showConfirmButton: false
                 });
             @endif

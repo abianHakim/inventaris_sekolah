@@ -10,3 +10,4 @@ class tm_user extends Model
     /** @use HasFactory<\Database\Factories\TmUserFactory> */
     use HasFactory;
 }
+ 

@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>SB Admin 2 - Dashboard</title>
+    <title>Dashboard</title>
 
     <!-- Custom fonts for this template-->
     <link href="{{ asset('assets') }}/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -36,9 +36,9 @@
             <!-- Sidebar - Brand -->
             <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ Route('superhome') }}">
                 <div class="sidebar-brand-icon rotate-n-15">
-                    <i class="fas fa-laugh-wink"></i>
+                    <i class="fas fa-box-open"></i>
                 </div>
-                <div class="sidebar-brand-text mx-3">SB Admin <sup>2</sup></div>
+                <div class="sidebar-brand-text mx-3">Inventaris Sekolah</div>
             </a>
 
             <!-- Divider -->
@@ -67,10 +67,21 @@
                 </div>
             </li>
 
-            <li class="nav-item ">
-                <a class="nav-link" href="index.html">
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePeminjaman"
+                    aria-expanded="true" aria-controls="collapsePeminjaman">
                     <i class="fas fa-fw fa-calendar-check"></i>
-                    <span>Peminjaman Barang</span></a>
+                    <span>Peminjamamn Barang</span>
+                </a>
+                <div id="collapsePeminjaman" class="collapse" aria-labelledby="headingPeminjaman"
+                    data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Halaman</h6>
+                        <a class="collapse-item" href="#">Daftr Peminjaman</a>
+                        <a class="collapse-item" href="#">Pengembalian Barang</a>
+                        <a class="collapse-item" href="#">Barang Belum Kembali</a>
+                    </div>
+                </div>
             </li>
 
 
@@ -102,7 +113,7 @@
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Halaman</h6>
                         <a class="collapse-item" href="{{ route('jbarang') }}">Jenis Barnag</a>
-                        <a class="collapse-item" href="#">Daftar Pengguna</a>
+                        <a class="collapse-item" href="{{ route('dpengguna') }}">Daftar Pengguna</a>
                     </div>
                 </div>
             </li>

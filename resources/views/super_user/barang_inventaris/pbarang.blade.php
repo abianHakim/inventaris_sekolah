@@ -10,45 +10,106 @@
             <h5>Form Input Barang</h5>
         </div>
         <div class="card-body">
-            <form action="" method="POST">
+            <form action="{{ route('pbarang.store') }}" method="POST" id="barangForm">
                 @csrf
-                <div class="form-group">
-                    <input type="hidden" name="br_kode" id="br_kode" value="">
-                </div>
-                <div class="form-group">
-                    <label for="jns_brg_kode">Jenis Barang</label>
-                    <select name="jns_brg_kode" id="jns_brg_kode" class="form-control">
-                        <option value="">-- Pilih Jenis Barang --</option>
-                        @foreach ($jenisBarang as $jenis)
-                            <option value="{{ $jenis->jns_brg_kode }}">{{ $jenis->jns_brg_kode }} -
-                                {{ $jenis->jns_brg_nama }}</option>
-                        @endforeach
-                    </select>
-                </div>
+                <!-- Input Kode Barang (Hidden) -->
+                <input type="hidden" name="br_kode" id="br_kode" value="{{ $kodeBarang ?? '' }}">
+
+                <!-- User -->
                 <div class="form-group">
                     <label for="user_id">User</label>
-                    <input type="text" name="user_id" id="user_id" class="form-control"
-                        value="{{ auth()->user()->user_name }}" readonly>
+                    <input type="hidden" name="user_id" id="user_id" value="{{ auth()->user()->user_id }}">
+                    <input type="text" class="form-control" value="{{ auth()->user()->user_name }}" readonly>
                 </div>
+
+                <!-- Nama Barang -->
                 <div class="form-group">
                     <label for="br_nama">Nama Barang</label>
-                    <input type="text" name="br_nama" id="br_nama" class="form-control" maxlength="50">
+                    <input type="text" name="br_nama" id="br_nama" class="form-control" value="{{ old('br_nama') }}"
+                        maxlength="50" required>
+                    <div class="invalid-feedback">Nama barang harus diisi.</div>
                 </div>
+
+                <!-- Jenis Barang -->
+                <div class="form-group">
+                    <label for="jns_brg_kode">Jenis Barang</label>
+                    <select name="jns_brg_kode" id="jns_brg_kode" class="form-control" required>
+                        <option value="" disabled selected>-- Pilih Jenis Barang --</option>
+                        @foreach ($jenisBarang as $jenis)
+                            <option value="{{ $jenis->jns_brg_kode }}"
+                                {{ old('jns_brg_kode') == $jenis->jns_brg_kode ? 'selected' : '' }}>
+                                {{ $jenis->jns_brg_kode }} - {{ $jenis->jns_brg_nama }}
+                            </option>
+                        @endforeach
+                    </select>
+                    <div class="invalid-feedback">Pilih jenis barang yang tersedia.</div>
+                </div>
+
+                <!-- Tanggal Terima -->
                 <div class="form-group">
                     <label for="br_tgl_terima">Tanggal Terima</label>
                     <input type="date" name="br_tgl_terima" id="br_tgl_terima" class="form-control"
-                        max="{{ date('Y-m-d') }}">
+                        value="{{ old('br_tgl_terima') }}" required>
+                    <div class="invalid-feedback">Tanggal terima harus diisi.</div>
                 </div>
+
+                <!-- Status Barang -->
                 <div class="form-group">
                     <label for="br_status">Status Barang</label>
-                    <select name="br_status" id="br_status" class="form-control">
-                        <option value="">-- Pilih Status Barang --</option>
-                        <option value="0">0 - Tidak AKtif</option>
-                        <option value="1">1 - Aktif</option>
+                    <select name="br_status" id="br_status" class="form-control" required>
+                        <option value="" disabled selected>-- Pilih Status Barang --</option>
+                        <option value="1" {{ old('br_status') === '1' ? 'selected' : '' }}>Tersedia</option>
+                        <option value="0" {{ old('br_status') === '0' ? 'selected' : '' }}>Tidak Tersedia</option>
                     </select>
+                    <div class="invalid-feedback">Status barang harus dipilih.</div>
                 </div>
+
+                <!-- Tombol Submit -->
                 <button type="submit" class="btn btn-primary">Kirim</button>
             </form>
         </div>
     </div>
 @endsection
+
+
+@push('script')
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('barangForm');
+
+            form.addEventListener('submit', function(event) {
+                let isValid = true;
+
+                // Validasi default HTML5
+                if (!form.checkValidity()) {
+                    isValid = false;
+                }
+
+                // Validasi tambahan untuk dropdown
+                const jenisBarang = document.getElementById('jns_brg_kode');
+                const statusBarang = document.getElementById('br_status');
+
+                if (!jenisBarang.value) {
+                    jenisBarang.classList.add('is-invalid');
+                    isValid = false;
+                } else {
+                    jenisBarang.classList.remove('is-invalid');
+                }
+
+                if (!statusBarang.value) {
+                    statusBarang.classList.add('is-invalid');
+                    isValid = false;
+                } else {
+                    statusBarang.classList.remove('is-invalid');
+                }
+
+                if (!isValid) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+
+                form.classList.add('was-validated');
+            }, false);
+        });
+    </script>
+@endpush

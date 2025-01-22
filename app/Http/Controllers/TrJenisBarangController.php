@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\tm_barang_inventaris;
 use Illuminate\Http\Request;
 use App\Models\tr_jenis_barang;
 
@@ -45,36 +46,6 @@ class TrJenisBarangController extends Controller
         return redirect('superjbarang')->with('success', 'Data Jenis Barang Berhasil Ditambahkan!');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Request $request, tr_jenis_barang $tr_jenis_barang)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Request $request, tr_jenis_barang $tr_jenis_barang)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    // public function update(Request $request, tr_jenis_barang $tr_jenis_barang)
-    // {
-    //     $validatedData = $request->validate([
-    //         'jns_brg_kode' => 'required|unique:tr_jenis_barang,jns_brg_kode,' . $tr_jenis_barang->id,
-    //         'jns_brg_nama' => 'required',
-    //     ]);
-
-    //     $tr_jenis_barang->update($validatedData);
-
-    //     return redirect('superjbarang')->with('success', 'Data Jenis Barang Berhasil Diubah!');
-    // }
 
     public function update(Request $request, $jns_brg_kode)
     {
@@ -97,12 +68,30 @@ class TrJenisBarangController extends Controller
      */
     public function destroy(Request $request, $jns_brg_kode)
     {
-        // Mencari data barang berdasarkan kode
+        // Mencari data jenis barang berdasarkan kode
         $tr_jenis_barang = tr_jenis_barang::where('jns_brg_kode', $jns_brg_kode)->firstOrFail();
 
-        // Hapus data
+        // Cek apakah ada barang yang terkait dengan jenis barang ini
+        $barangTerkait = tm_barang_inventaris::where('jns_brg_kode', $jns_brg_kode)->exists();
+
+        if ($barangTerkait) {
+            // Jika ada barang yang terkait, redirect dengan pesan error
+            return redirect('superjbarang')->with('error', 'Jenis Barang ini tidak dapat dihapus karena ada barang yang terkait.');
+        }
+
+        // Jika tidak ada barang yang terkait, lanjutkan dengan penghapusan data jenis barang
         $tr_jenis_barang->delete();
 
+        // Redirect dengan pesan sukses
         return redirect('superjbarang')->with('success', 'Data Jenis Barang Berhasil Dihapus!');
+    }
+
+    public function checkBarangTerkait($kode)
+    {
+        // Cek apakah ada barang yang terkait dengan jenis barang ini
+        $barangTerkait = tm_barang_inventaris::where('jns_brg_kode', $kode)->exists();
+
+        // Mengembalikan response dalam format JSON
+        return response()->json(['barangTerkait' => $barangTerkait]);
     }
 }
