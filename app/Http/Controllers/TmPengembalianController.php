@@ -13,54 +13,15 @@ class TmPengembalianController extends Controller
      */
     public function index()
     {
-        //
+        $pengembalian = tm_pengembalian::with(['peminjaman', 'user'])->get();
+
+        // Kirim data ke view
+        return view("super_user.peminjaman_barang.pebarang", compact('pengembalian'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Storetm_pengembalianRequest $request)
+    public function belumkembali()
     {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(tm_pengembalian $tm_pengembalian)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(tm_pengembalian $tm_pengembalian)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Updatetm_pengembalianRequest $request, tm_pengembalian $tm_pengembalian)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(tm_pengembalian $tm_pengembalian)
-    {
-        //
+        return view("super_user.peminjaman_barang.barangbk");
     }
 }

@@ -15,7 +15,7 @@ return new class extends Migration
             $table->string('pbd_id', 20)->primary()->notNullable();
 
             $table->string('pb_id', 20);
-            $table->string('br_kode', 10);
+            $table->string('br_kode', 12);
 
             $table->dateTime("pdb_tgl");
             $table->string("pdb_sts", 2);

@@ -1,7 +1,6 @@
 @extends('template.SU')
 
-@push('style')
-@endpush
+
 
 @section('content')
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
@@ -68,9 +67,9 @@
                                 <td>{{ $barang->status_label }}</td>
                                 <td>
                                     <!-- Tombol Edit -->
-                                    <a href="#" class="btn btn-warning btn-circle" data-toggle="modal"
-                                        data-target="#editModal" data-id="{{ $barang->br_kode }} "
-                                        data-nama="{{ $barang->br_nama }}" data-jenis="{{ $barang->jns_brg_kode }} "
+                                    <a href="#" class="btn btn-warning btn-circle edit-btn" data-toggle="modal"
+                                        data-target="#editModal" data-id="{{ $barang->br_kode }}"
+                                        data-nama="{{ $barang->br_nama }}" data-jenis="{{ $barang->jns_brg_kode }}"
                                         data-tgl_terima="{{ $barang->br_tgl_terima }}"
                                         data-status="{{ $barang->br_status }}">
                                         <i class="fas fa-edit"></i>
@@ -102,14 +101,43 @@
             <div class="modal-header">
                 <h5 class="modal-title" id="editModalLabel">Edit Barang</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
+                    <span aria-hidden="true">×</span>
                 </button>
             </div>
             <form id="editForm" method="POST" action="{{ route('pbarang.update', ':br_kode') }}">
                 @csrf
                 @method('PATCH')
+                <!-- Form Fields -->
                 <div class="modal-body">
-                    <!-- Form Fields -->
+                    <div class="form-group">
+                        <label for="edit_br_kode">Kode Barang</label>
+                        <input type="text" class="form-control" id="edit_br_kode" name="br_kode" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit_br_nama">Nama Barang</label>
+                        <input type="text" class="form-control" id="edit_br_nama" name="br_nama">
+                    </div>
+                    <div class="form-group">
+                        <label for="edit_jns_brg_kode">Jenis Barang</label>
+                        <select class="form-control" id="edit_jns_brg_kode" name="jns_brg_kode">
+                            <option value="">-- Pilih Jenis Barang --</option>
+                            @foreach ($jenisBarang as $jenis)
+                                <option value="{{ $jenis->jns_brg_kode }}">{{ $jenis->jns_brg_kode }} -
+                                    {{ $jenis->jns_brg_nama }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit_br_tgl_terima">Tanggal Terima</label>
+                        <input type="date" class="form-control" id="edit_br_tgl_terima" name="br_tgl_terima">
+                    </div>
+                    <div class="form-group">
+                        <label for="edit_br_status">Status Barang</label>
+                        <select class="form-control" id="edit_br_status" name="br_status">
+                            <option value="1">Terseda</option>
+                            <option value="0">Tidak Tersedia</option>
+                        </select>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
@@ -127,13 +155,10 @@
     <script>
         // Tambahkan event listener ke tombol delete
         $(document).on('click', '.deleteBtn', function(e) {
-            e.preventDefault(); // Mencegah form langsung dikirimkan
-
-            // Ambil ID dari data-id pada tombol
+            e.preventDefault();
             var formId = $(this).data('id');
             var deleteForm = $('#deleteForm-' + formId);
 
-            // Konfirmasi menggunakan SweetAlert2
             Swal.fire({
                 title: 'Apakah Anda yakin?',
                 text: "Data ini akan dihapus dan tidak bisa dikembalikan!",
@@ -144,10 +169,28 @@
                 reverseButtons: true
             }).then((result) => {
                 if (result.isConfirmed) {
-                    // Jika konfirmasi "Hapus" diklik, submit form
                     deleteForm.submit();
                 }
             });
+        });
+
+        // Edit Modal
+        $(document).on('click', '.edit-btn', function() {
+            var br_kode = $(this).data('id');
+            var br_nama = $(this).data('nama');
+            var jns_brg_kode = $(this).data('jenis');
+            var br_tgl_terima = $(this).data('tgl_terima');
+            var br_status = $(this).data('status');
+
+            $('#edit_br_kode').val(br_kode);
+            $('#edit_br_nama').val(br_nama);
+            $('#edit_jns_brg_kode').val(jns_brg_kode);
+            $('#edit_br_tgl_terima').val(br_tgl_terima);
+            $('#edit_br_status').val(br_status);
+
+            var actionUrl = '{{ route('pbarang.update', ':br_kode') }}';
+            actionUrl = actionUrl.replace(':br_kode', br_kode);
+            $('#editForm').attr('action', actionUrl);
         });
     </script>
 
@@ -168,28 +211,8 @@
                 ]
             });
         });
-
-        $('#editModal').on('show.bs.modal', function(event) {
-            var button = $(event.relatedTarget); // Tombol yang dipilih untuk membuka modal
-            var br_kode = button.data('id');
-            var br_nama = button.data('nama');
-            var jns_brg_kode = button.data('jenis');
-            var br_tgl_terima = button.data('tgl_terima');
-            var br_status = button.data('status');
-
-            var modal = $(this);
-            modal.find('#edit_br_kode').val(br_kode);
-            modal.find('#edit_br_nama').val(br_nama);
-            modal.find('#edit_jns_brg_kode').val(jns_brg_kode);
-            modal.find('#edit_br_tgl_terima').val(br_tgl_terima);
-            modal.find('#edit_br_status').val(br_status);
-
-            // Update action URL form untuk update data
-            var actionUrl = '{{ route('pbarang.update', ':br_kode') }}';
-            actionUrl = actionUrl.replace(':br_kode', br_kode);
-            modal.find('#editForm').attr('action', actionUrl);
-        });
     </script>
+
     <script>
         @if (session('success'))
             Swal.fire({

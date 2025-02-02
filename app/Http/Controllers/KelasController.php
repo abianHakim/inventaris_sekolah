@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\kelas;
 use App\Http\Requests\StorekelasRequest;
 use App\Http\Requests\UpdatekelasRequest;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class KelasController extends Controller
 {
@@ -13,54 +15,66 @@ class KelasController extends Controller
      */
     public function index()
     {
-        //
+        $data['kelas'] = kelas::all();
+        return view('super_user.daftar_siswa.dkelas')->with($data);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+
+    public function store(Request $request)
     {
-        //
+        $request->validate([
+            'nama_kelas' => 'required|string|max:255',
+            'nama_jurusan' => 'required|string|max:255',
+        ]);
+
+        $lastKelas = Kelas::latest()->first();
+        $lastNo = $lastKelas ? $lastKelas->id : 0;
+
+        // Buat nomor baru berikutnya
+        $newNo = $lastNo + 1;
+
+        // Simpan data kelas dengan nomor baru
+        Kelas::create([
+            'id' => $newNo,
+            'nama_kelas' => $request->nama_kelas,
+            'nama_jurusan' => $request->nama_jurusan,
+        ]);
+
+        return redirect()->route('kelas')->with('success', 'Data kelas berhasil ditambahkan.');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StorekelasRequest $request)
-    {
-        //
-    }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(kelas $kelas)
+    public function update(Request $request, $id)
     {
-        //
-    }
+        // Validasi input
+        $request->validate([
+            'nama_kelas' => 'required|string|max:255',
+            'nama_jurusan' => 'required|string|max:255',
+        ]);
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(kelas $kelas)
-    {
-        //
-    }
+        // Cari data kelas berdasarkan ID
+        $kelas = Kelas::findOrFail($id);
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdatekelasRequest $request, kelas $kelas)
-    {
-        //
+        // Update data
+        $kelas->update([
+            'nama_kelas' => $request->nama_kelas,
+            'nama_jurusan' => $request->nama_jurusan,
+        ]);
+
+        // Redirect dengan pesan sukses
+        return redirect()->route('kelas')->with('success', 'Data kelas berhasil diperbarui.');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(kelas $kelas)
+    public function destroy($id)
     {
-        //
+        $kelas = Kelas::findOrFail($id);
+
+        $kelas->delete();
+
+        // Redirect dengan pesan sukses
+        return redirect()->route('kelas')->with('success', 'Data kelas berhasil dihapus.');
     }
 }

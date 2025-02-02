@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('tm_peminjaman', function (Blueprint $table) {
-            $table->string('pb_id', 10)->primary();
+            $table->string('pb_id', 20)->primary();
             $table->string('user_id', 10);
 
             $table->dateTime('pb_tgl')->nullable();
@@ -24,7 +24,7 @@ return new class extends Migration
 
             //for
             $table->foreign('user_id')->references('user_id')->on('tm_user');
-            $table->foreign('siswa_id')->references('siswa_id')->on('siswa');
+            // $table->foreign('siswa_id')->references('siswa_id')->on('siswa');
         });
     }
 

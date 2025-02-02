@@ -10,21 +10,24 @@ class siswa extends Model
     /** @use HasFactory<\Database\Factories\SiswaFactory> */
     use HasFactory;
 
-    protected $tabel = 'siswa';
+    protected $table = 'siswa';
+
+    protected $primaryKey = 'siswa_id';
+    public $incrementing = false;
+    protected $keyType = 'string';
 
     protected $fillable = [
         'siswa_id',
         'nisn',
         'nama_siswa',
-        'jurusan_id',
         'kelas_id',
         'no_siswa',
     ];
 
-    public function jurusan()
-    {
-        return $this->belongsTo(Jurusan::class, 'jurusan_id', 'id');
-    }
+    // public function jurusan()
+    // {
+    //     return $this->belongsTo(Jurusan::class, 'jurusan_id', 'id');
+    // }
 
     public function kelas()
     {

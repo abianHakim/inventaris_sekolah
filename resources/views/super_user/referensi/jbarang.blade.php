@@ -165,7 +165,7 @@
                         // Kirim permintaan ajax untuk memeriksa ketergantungan
                         $.ajax({
                             url: '/check-barang-terkait/' +
-                            kode, // URL endpoint untuk pengecekan barang terkait
+                                kode, // URL endpoint untuk pengecekan barang terkait
                             method: 'GET',
                             success: function(response) {
                                 if (response.barangTerkait) {

@@ -5,11 +5,9 @@
 
 @section('content')
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800" style="color: black">Penerimaan Barang</h1>
+        <h1 class="h3 mb-0 text-gray-800" style="color: black">Laporan Status Barang</h1>
     </div>
 @endsection
-
-
 
 
 

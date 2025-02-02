@@ -12,8 +12,14 @@ class kelas extends Model
 
     protected $table = "kelas";
 
+    protected $primaryKey = 'id';
+    public $incrementing = false;
+    protected $keyType = 'string';
+
+
     protected $fillable = [
         "nama_kelas",
+        "nama_jurusan",
     ];
 
     public function siswa()
