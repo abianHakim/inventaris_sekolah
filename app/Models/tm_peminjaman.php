@@ -40,7 +40,7 @@ class tm_peminjaman extends Model
         return $this->belongsTo(Siswa::class, 'siswa_id', 'siswa_id');
     }
 
-    public function peminjamanBarang()
+    public function detailPeminjaman()
     {
         return $this->hasMany(td_peminjaman_barang::class, 'pb_id', 'pb_id');
     }

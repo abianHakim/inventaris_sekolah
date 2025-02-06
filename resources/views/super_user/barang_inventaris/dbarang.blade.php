@@ -1,4 +1,7 @@
-@extends('template.SU')
+@extends('template.su')
+
+@push('style')
+@endpush
 
 
 
@@ -41,29 +44,44 @@
 
         <div class="card-body">
             <div class="table-responsive">
-                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <table class="table table-bordered" id="dataTable">
                     <thead>
                         <tr>
                             <th>kode</th>
                             <th>Jenis Barang</th>
-                            <th>User id</th>
+                            {{-- <th>User id</th> --}}
                             <th>Nama Barang</th>
                             <th>Tanggal Terima</th>
-                            <th>Tanggal Entry</th>
+                            <th>Kondisi</th>
                             <th>Status</th>
                             <th>Aksi</th>
                         </tr>
                     </thead>
 
                     <tbody>
+                        {{-- ({{ $barang->jns_brg_kode }}) --}}
                         @foreach ($barangInventaris as $barang)
                             <tr>
                                 <td>{{ $barang->br_kode }}</td>
-                                <td>{{ $barang->jenisbarang->jns_brg_nama ?? '-' }} ({{ $barang->jns_brg_kode }})</td>
-                                <td>{{ $barang->user_id }}</td>
+                                <td>{{ $barang->jenisbarang->jns_brg_nama ?? '-' }} </td>
+                                {{-- <td>{{ $barang->user_id }}</td>     --}}
                                 <td>{{ $barang->br_nama }}</td>
                                 <td>{{ $barang->br_tgl_terima }}</td>
-                                <td>{{ $barang->br_tgl_entry }}</td>
+                                <td>
+                                    @switch($barang->br_con)
+                                        @case(1)
+                                            Kondisi Baik
+                                        @break
+
+                                        @case(2)
+                                            Rusak (Bisa Diperbaiki)
+                                        @break
+
+                                        @case(3)
+                                            Rusak (Tidak Bisa Digunakan)
+                                        @break
+                                    @endswitch
+                                </td>
                                 <td>{{ $barang->status_label }}</td>
                                 <td>
                                     <!-- Tombol Edit -->
@@ -71,7 +89,7 @@
                                         data-target="#editModal" data-id="{{ $barang->br_kode }}"
                                         data-nama="{{ $barang->br_nama }}" data-jenis="{{ $barang->jns_brg_kode }}"
                                         data-tgl_terima="{{ $barang->br_tgl_terima }}"
-                                        data-status="{{ $barang->br_status }}">
+                                        data-status="{{ $barang->br_status }}" data-con="{{ $barang->br_con }}">
                                         <i class="fas fa-edit"></i>
                                     </a>
                                     <!-- Form Delete -->
@@ -138,6 +156,15 @@
                             <option value="0">Tidak Tersedia</option>
                         </select>
                     </div>
+                    <div class="form-group">
+                        <label for="edit_br_con">Kondisi Barang</label>
+                        <select class="form-control" id="edit_br_con" name="br_con">
+                            <option value="1">Kondisi Baik</option>
+                            <option value="2">Rusak (Bisa Diperbaiki)</option>
+                            <option value="3">Rusak (Tidak Bisa Digunakan)</option>
+                            <option value="0">Dihapus dari Sistem</option>
+                        </select>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
@@ -149,7 +176,6 @@
 </div>
 
 @push('script')
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
@@ -181,12 +207,14 @@
             var jns_brg_kode = $(this).data('jenis');
             var br_tgl_terima = $(this).data('tgl_terima');
             var br_status = $(this).data('status');
+            var br_con = $(this).data('con');
 
             $('#edit_br_kode').val(br_kode);
             $('#edit_br_nama').val(br_nama);
             $('#edit_jns_brg_kode').val(jns_brg_kode);
             $('#edit_br_tgl_terima').val(br_tgl_terima);
             $('#edit_br_status').val(br_status);
+            $('#edit_br_con').val(br_con)
 
             var actionUrl = '{{ route('pbarang.update', ':br_kode') }}';
             actionUrl = actionUrl.replace(':br_kode', br_kode);
@@ -194,24 +222,6 @@
         });
     </script>
 
-    <script>
-        $(document).ready(function() {
-            $('#dataTable').DataTable({
-                "paging": true,
-                "lengthChange": true,
-                "lengthMenu": [10, 25, 50, 100],
-                "searching": true,
-                "ordering": true,
-                "info": true,
-                "autoWidth": false,
-                "responsive": true,
-                "dom": 'Bfrtip',
-                "buttons": [
-                    'copy', 'csv', 'excel', 'pdf', 'print'
-                ]
-            });
-        });
-    </script>
 
     <script>
         @if (session('success'))

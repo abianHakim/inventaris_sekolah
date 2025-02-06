@@ -23,7 +23,7 @@ class td_peminjaman_barang extends Model
         'pdb_sts',
     ];
 
-    public function barangInventaris()
+    public function barang()
     {
         return $this->belongsTo(tm_barang_inventaris::class, 'br_kode', 'br_kode');
     }

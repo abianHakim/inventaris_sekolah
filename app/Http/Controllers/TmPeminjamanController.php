@@ -18,13 +18,23 @@ use Illuminate\Support\Facades\Log;
 class TmPeminjamanController extends Controller
 {
 
-    public function index()
+    public function  index()
     {
-        $peminjaman = tm_peminjaman::with('siswa')->get();
+        $peminjaman = tm_peminjaman::with(['siswa', 'user', 'detailPeminjaman.barang'])->get();
         $siswa = siswa::all();
         $barang = tm_barang_inventaris::where('br_status', 1)->get();
+
         return view('super_user.peminjaman_barang.dpeminjaman', compact('peminjaman', 'siswa', 'barang'));
     }
+
+    public function transaksi()
+    {
+        $peminjaman = tm_peminjaman::with(['siswa', 'user', 'detailPeminjaman.barang'])->get();
+        $siswa = siswa::all();
+        $barang = tm_barang_inventaris::where('br_status', 1)->get();
+        return view('super_user.peminjaman_barang.transaksi', compact('peminjaman', 'siswa', 'barang'));
+    }
+
 
     public function store(Request $request)
     {
@@ -77,10 +87,15 @@ class TmPeminjamanController extends Controller
 
             DB::commit();
 
-            return redirect()->route('peminjaman.index')->with('success', 'Peminjaman berhasil!');
+            session()->flash('success', 'Peminjaman berhasil dibuat!');
+            return redirect()->route('peminjaman.index');
         } catch (\Exception $e) {
+            // Rollback jika ada error
             DB::rollBack();
-            return redirect()->back()->with('error', 'Error: ' . $e->getMessage());
+
+            // Mengirim session error jika terjadi kesalahan
+            session()->flash('error', 'Terjadi kesalahan: ' . $e->getMessage());
+            return redirect()->route('peminjaman.index');
         }
     }
 }

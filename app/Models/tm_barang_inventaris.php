@@ -24,6 +24,7 @@ class tm_barang_inventaris extends Model
         'br_tgl_terima',
         'br_tgl_entry',
         'br_status',
+        'br_con',
     ];
 
     public function jenisBarang()

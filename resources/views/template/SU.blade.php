@@ -20,6 +20,7 @@
 
     <!-- Custom styles for this template-->
     <link href="{{ asset('assets') }}/css/sb-admin-2.min.css" rel="stylesheet">
+    <link href="{{ asset('assets') }}/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
 
     @stack('style')
 
@@ -78,6 +79,7 @@
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Halaman</h6>
+                        <a class="collapse-item text-wrap" href="{{ route('transaksi') }}">Transaksi Peminjamamn</a>
                         <a class="collapse-item text-wrap" href="{{ route('peminjaman.index') }}">Daftr Peminjaman</a>
                         <a class="collapse-item text-wrap" href="{{ route('pebarang') }}">Pengembalian Barang</a>
                         <a class="collapse-item text-wrap" href="{{ route('barangbk') }}">Barang Belum Kembali</a>
@@ -97,11 +99,10 @@
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Halaman</h6>
-                        <a class="collapse-item text-wrap" href="{{ route('laporanbarang') }}">Laporan Barang</a>
-                        <a class="collapse-item text-wrap" href="{{ route('pengembalianbarang') }}">Laporan
-                            Penegmbalian
+                        <a class="collapse-item text-wrap" href="{{ route('laporanbarang') }}">Barang Tersedia</a>
+                        <a class="collapse-item text-wrap" href="{{ route('pengembalianbarang') }}">Penegmbalian
                             Barang</a>
-                        <a class="collapse-item text-wrap" href="{{ route('statusbarang') }}">Laporan Status Barang</a>
+                        <a class="collapse-item text-wrap" href="{{ route('statusbarang') }}">Status Barang</a>
                     </div>
                 </div>
             </li>
@@ -276,25 +277,18 @@
         <i class="fas fa-angle-up"></i>
     </a>
 
-
-
     <!-- Bootstrap core JavaScript-->
     <script src="{{ asset('assets') }}/vendor/jquery/jquery.min.js"></script>
     <script src="{{ asset('assets') }}/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-
     <!-- Core plugin JavaScript-->
     <script src="{{ asset('assets') }}/vendor/jquery-easing/jquery.easing.min.js"></script>
-
     <!-- Custom scripts for all pages-->
     <script src="{{ asset('assets') }}/js/sb-admin-2.min.js"></script>
-
     <!-- Page level plugins -->
-    <script src="{{ asset('assets') }}/vendor/chart.js/Chart.min.js"></script>
-
+    <script src="{{ asset('assets') }}/vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="{{ asset('assets') }}/vendor/datatables/dataTables.bootstrap4.min.js"></script>
     <!-- Page level custom scripts -->
-    <script src="{{ asset('assets') }}/js/demo/chart-area-demo.js"></script>
-    <script src="{{ asset('assets') }}/js/demo/chart-pie-demo.js"></script>
-
+    <script src="{{ asset('assets') }}/js/demo/datatables-demo.js"></script>
     @stack('script')
 
 </body>

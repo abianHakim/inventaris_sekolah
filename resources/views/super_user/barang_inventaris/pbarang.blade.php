@@ -34,7 +34,7 @@
                 <div class="form-group">
                     <label for="jns_brg_kode">Jenis Barang</label>
                     <select name="jns_brg_kode" id="jns_brg_kode" class="form-control" required>
-                        <option value="" disabled selected>-- Pilih Jenis Barang --</option>
+                        <option value="" disabled selected> Pilih Jenis Barang </option>
                         @foreach ($jenisBarang as $jenis)
                             <option value="{{ $jenis->jns_brg_kode }}"
                                 {{ old('jns_brg_kode') == $jenis->jns_brg_kode ? 'selected' : '' }}>
@@ -57,12 +57,27 @@
                 <div class="form-group">
                     <label for="br_status">Status Barang</label>
                     <select name="br_status" id="br_status" class="form-control" required>
-                        <option value="" disabled selected>-- Pilih Status Barang --</option>
+                        <option value="" disabled selected> Pilih Status Barang </option>
                         <option value="1" {{ old('br_status') === '1' ? 'selected' : '' }}>Tersedia</option>
                         <option value="0" {{ old('br_status') === '0' ? 'selected' : '' }}>Tidak Tersedia</option>
                     </select>
                     <div class="invalid-feedback">Status barang harus dipilih.</div>
                 </div>
+
+                <!-- Kondisi Barang -->
+                <div class="form-group">
+                    <label for="br_con">Kondisi Barang</label>
+                    <select name="br_con" id="br_con" class="form-control" required>
+                        <option value="1" {{ old('br_con') === '1' ? 'selected' : '' }}>Kondisi Baik</option>
+                        <option value="2" {{ old('br_con') === '2' ? 'selected' : '' }}>Rusak (Bisa Diperbaiki)
+                        </option>
+                        <option value="3" {{ old('br_con') === '3' ? 'selected' : '' }}>Rusak (Tidak Bisa Digunakan)
+                        </option>
+                        <option value="0" {{ old('br_con') === '0' ? 'selected' : '' }}>Dihapus dari Sistem</option>
+                    </select>
+                    <div class="invalid-feedback">Pilih kondisi barang.</div>
+                </div>
+
 
                 <!-- Tombol Submit -->
                 <button type="submit" class="btn btn-primary">Kirim</button>

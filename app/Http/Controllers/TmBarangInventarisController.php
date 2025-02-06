@@ -12,10 +12,6 @@ use Illuminate\Support\Facades\DB;
 class TmBarangInventarisController extends Controller
 {
 
-
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
         $data["barangInventaris"] = Tm_barang_inventaris::all();
@@ -29,17 +25,6 @@ class TmBarangInventarisController extends Controller
         return view("super_user.barang_inventaris.pbarang")->with($data);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         // Validasi input
@@ -49,6 +34,7 @@ class TmBarangInventarisController extends Controller
             'br_nama' => 'required|string|max:50',
             'br_tgl_terima' => 'required|date',
             'br_status' => 'required|in:0,1',
+            'br_con' => 'required',
         ]);
 
         // Buat kode barang (langsung di sini)
@@ -76,6 +62,7 @@ class TmBarangInventarisController extends Controller
             'br_tgl_terima' => $validated['br_tgl_terima'],
             'br_tgl_entry' => now(),
             'br_status' => $validated['br_status'],
+            'br_con' => $validated['br_con'],
         ]);
 
         session()->flash('success', 'Data Barang berhasil ditambahkan.');
@@ -91,6 +78,7 @@ class TmBarangInventarisController extends Controller
             'jns_brg_kode' => 'required|string',
             'br_tgl_terima' => 'required|date',
             'br_status' => 'required|in:0,1',
+            'br_con' => 'required',
         ]);
 
         // Update data barang
@@ -100,6 +88,7 @@ class TmBarangInventarisController extends Controller
             'jns_brg_kode' => $validated['jns_brg_kode'],
             'br_tgl_terima' => $validated['br_tgl_terima'],
             'br_status' => $validated['br_status'],
+            'br_con' => $validated['br_con'],
         ]);
 
         return redirect()->route('dbarang')->with('success', 'Data barang berhasil diperbarui.');
@@ -115,18 +104,5 @@ class TmBarangInventarisController extends Controller
         } else {
             return redirect()->route('dbarang')->with('error', 'Barang tidak ditemukan.');
         }
-    }
-
-    public function show(tm_barang_inventaris $tm_barang_inventaris)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(tm_barang_inventaris $tm_barang_inventaris)
-    {
-        //
     }
 }

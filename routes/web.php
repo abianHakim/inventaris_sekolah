@@ -36,19 +36,17 @@ Route::get('superpbarang', [TmBarangInventarisController::class, 'showpenerimaan
 Route::post('superpbarang', [TmBarangInventarisController::class, 'store'])->name('pbarang.store');
 
 // PEMINAJAMN BARANG
-//peminjaman route
+Route::get('supertransaksi', [TmPeminjamanController::class, 'transaksi'])->name('transaksi');
 Route::get('superpeminjaman', [TmPeminjamanController::class, 'index'])->name('peminjaman.index');
 Route::post('superpeminjaman', [TmPeminjamanController::class, 'store'])->name('peminjaman.store');
-
 Route::get('superpebarang', [TmPengembalianController::class, 'index'])->name('pebarang');
 Route::get('superbarangbelumkembali', [TmPengembalianController::class, 'belumkembali'])->name('barangbk');
-
+Route::post('superpengembalian', [TmPengembalianController::class, 'store'])->name('pengembalian.store');
 
 // LAPORAN
 Route::get('super-laporan-barang', [laporan::class, 'laporanbarang'])->name('laporanbarang');
 Route::get('super-laporan-pengembalian', [laporan::class, 'pengembalian'])->name('pengembalianbarang');
 Route::get('super-laporan-status', [laporan::class, 'laporanstatus'])->name('statusbarang');
-
 
 // REFERENSI
 // cek barang terkait
@@ -61,6 +59,8 @@ Route::delete('superjbarang/{jns_brg_kode}', [TrJenisBarangController::class, 'd
 
 //daftar pengguna
 Route::get('superdpengguna', [daftarPengguna::class, 'index'])->name('dpengguna');
+Route::post('superdpengguna', [daftarPengguna::class, 'store'])->name('dpengguna.store');
+
 
 //data siswa
 Route::get('supersiswa', [SiswaController::class, 'index'])->name('siswa');
