@@ -217,7 +217,7 @@
                     title: 'Sukses!',
                     text: '{{ session('success') }}',
                     showConfirmButton: false,
-                    timer: 1500 // Pop-up akan hilang setelah 1.5 detik
+                    timer: 1500 
                 });
             @endif
         });
