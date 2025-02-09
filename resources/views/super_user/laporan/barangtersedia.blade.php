@@ -1,7 +1,69 @@
 @extends('template.SU')
 
 @push('style')
-    <link href="{{ asset('assets') }}/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+    <link href="{{ asset('assets/vendor/datatables/dataTables.bootstrap4.min.css') }}" rel="stylesheet">
+    <link href="https://cdn.datatables.net/buttons/2.1.0/css/buttons.dataTables.min.css" rel="stylesheet">
+
+    <style>
+        .dt-buttons .btn {
+            margin: 5px;
+            font-size: 14px;
+            border-radius: 5px;
+            color: white !important;
+        }
+
+        .btn-success {
+            background-color: #28a745 !important;
+            border-color: #28a745 !important;
+        }
+
+        .btn-danger {
+            background-color: #dc3545 !important;
+            border-color: #dc3545 !important;
+        }
+
+        .btn-info {
+            background-color: #17a2b8 !important;
+            border-color: #17a2b8 !important;
+        }
+
+        .btn-primary {
+            background-color: #007bff !important;
+            border-color: #007bff !important;
+        }
+
+        .btn-secondary {
+            background-color: #6c757d !important;
+            border-color: #6c757d !important;
+        }
+
+        .btn-warning {
+            background-color: #ffc107 !important;
+            border-color: #ffc107 !important;
+        }
+
+
+        .table thead {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .badge {
+            font-size: 14px;
+            padding: 5px 10px;
+        }
+
+        .filter-container {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+
+        #global-search {
+            border-radius: 5px;
+        }
+        
+    </style>
 @endpush
 
 @section('content')
@@ -14,14 +76,36 @@
             <h6 class="m-0 font-weight-bold text-primary">Tabel</h6>
         </div>
         <div class="card-body">
+            <div class="row mb-3">
+                <div class="col-md-4">
+                    <label for="filter-kategori">📌 Filter Kategori:</label>
+                    <select id="filter-kategori" class="form-control">
+                        <option value="">Semua Kategori</option>
+                        @foreach ($barang->unique('jns_brg_kode') as $b)
+                            <option value="{{ $b->jenisBarang->jns_brg_nama ?? '-' }}">
+                                {{ $b->jenisBarang->jns_brg_nama ?? '-' }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label for="filter-tanggal-awal">📅 Dari Tanggal:</label>
+                    <input type="date" id="filter-tanggal-awal" class="form-control">
+                </div>
+                <div class="col-md-4">
+                    <label for="filter-tanggal-akhir">📅 Sampai Tanggal:</label>
+                    <input type="date" id="filter-tanggal-akhir" class="form-control">
+                </div>
+            </div>
+
             <div class="table-responsive">
                 <table class="table table-bordered" id="dataTable">
                     {{-- <table> --}}
                     <thead>
                         <tr>
                             <th>kode</th>
-                            <th>Jenis Barang</th>
                             <th>Nama Barang</th>
+                            <th>Jenis Barang</th>
                             <th>Tanggal Terima</th>
                             <th>Status</th>
                         </tr>
@@ -32,8 +116,8 @@
                         @foreach ($barang as $b)
                             <tr>
                                 <td>{{ $b->br_kode }}</td>
-                                <td>{{ $b->jenisbarang->jns_brg_nama ?? '-' }} </td>
                                 <td>{{ $b->br_nama }}</td>
+                                <td>{{ $b->jenisbarang->jns_brg_nama ?? '-' }} </td>
                                 <td>{{ $b->br_tgl_terima }}</td>
                                 <td>
                                     <span style="font-size: 15px"
@@ -55,5 +139,147 @@
 
 
 
-@push('style')
+@push('script')
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="{{ asset('assets/vendor/datatables/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/datatables/dataTables.bootstrap4.min.js') }}"></script>
+
+    <!-- DataTables Buttons -->
+    <script src="https://cdn.datatables.net/buttons/2.1.0/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.2.0/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.1.0/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.1.0/js/buttons.print.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.1.0/js/buttons.colVis.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            if ($.fn.DataTable.isDataTable("#dataTable")) {
+                $("#dataTable").DataTable().destroy();
+            }
+
+            var table = $('#dataTable').DataTable({
+                "responsive": true,
+                "autoWidth": false,
+                "pageLength": 10,
+                "dom": '<"row"<"col-md-7"B><"col-md-5"f>>rtip',
+                "buttons": [{
+                        extend: 'excel',
+                        text: '<i class="fas fa-file-excel"></i> Excel',
+                        className: 'btn btn-success',
+                        title: 'Barang Tersedia',
+                        customizeData: function(data) {
+                            // Menjadikan teks header lebih terlihat
+                            data.header.forEach(function(header, index) {
+                                data.header[index] = header.toUpperCase();
+                            });
+                        }
+                    },
+                    {
+                        extend: 'pdf',
+                        text: '<i class="fas fa-file-pdf"></i> PDF',
+                        className: 'btn btn-danger',
+                        title: 'Barang Tersedia',
+                        customize: function(doc) {
+                            // Mengatur warna header tabel pada PDF
+                            doc.styles.tableHeader = {
+                                fillColor: '#007bff', // Warna header
+                                color: 'white', // Warna teks header
+                                alignment: 'center',
+                                bold: true
+                            };
+
+                            // Memastikan semua header dalam tabel mendapatkan warna
+                            doc.content[1].table.headerRows = 1;
+                            doc.content[1].table.body[0].forEach(function(header) {
+                                header.fillColor = '#007bff'; // Warna latar belakang header
+                                header.color = 'white'; // Warna teks header
+                            });
+
+                            // Menyesuaikan margin dokumen
+                            doc.pageMargins = [20, 20, 20, 20];
+                        }
+                    },
+                    {
+                        extend: 'print',
+                        text: '<i class="fas fa-print"></i> Print',
+                        className: 'btn btn-info',
+                        title: 'Barang Tersedia',
+                        customize: function(win) {
+                            $(win.document.body).css('font-size', '14px');
+                            $(win.document.body).find('table').addClass('display').css('width',
+                                '100%');
+
+                            // Menambahkan styling CSS agar warna tetap ada di print
+                            var css = '@media print {' +
+                                'thead th { background-color: #007bff !important; color: white !important; }' +
+                                '}';
+                            var head = win.document.head || win.document.getElementsByTagName(
+                                'head')[0];
+                            var style = win.document.createElement('style');
+                            style.type = 'text/css';
+                            style.media = 'print';
+                            if (style.styleSheet) {
+                                style.styleSheet.cssText = css;
+                            } else {
+                                style.appendChild(win.document.createTextNode(css));
+                            }
+                            head.appendChild(style);
+                        }
+                    },
+                    {
+                        extend: 'csv',
+                        text: '<i class="fas fa-file-csv"></i> CSV',
+                        className: 'btn btn-primary',
+                        title: 'Barang Tersedia'
+                    },
+                    {
+                        extend: 'copy',
+                        text: '<i class="fas fa-copy"></i> Copy',
+                        className: 'btn btn-secondary',
+                        title: 'Barang Tersedia'
+                    },
+                    {
+                        extend: 'colvis',
+                        text: '<i class="fas fa-columns"></i> Kolom',
+                        className: 'btn btn-warning'
+                    }
+                ]
+            });
+
+            $('#global-search').on('keyup', function() {
+                table.search(this.value).draw();
+            });
+
+            $('#filter-tanggal-awal, #filter-tanggal-akhir').on('change', function() {
+                var tanggalAwal = $('#filter-tanggal-awal').val();
+                var tanggalAkhir = $('#filter-tanggal-akhir').val();
+
+                if (tanggalAwal && tanggalAkhir) {
+                    table.draw();
+                }
+            });
+
+            $('#filter-kategori').on('change', function() {
+                var kategori = $(this).val();
+                if (kategori) {
+                    table.column(2).search(kategori).draw();
+                } else {
+                    table.column(2).search("").draw();
+                }
+            });
+
+            $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
+                var tanggalAwal = $('#filter-tanggal-awal').val();
+                var tanggalAkhir = $('#filter-tanggal-akhir').val();
+                var tanggalData = data[3] || "";
+
+                if (tanggalAwal && tanggalAkhir) {
+                    return (tanggalData >= tanggalAwal && tanggalData <= tanggalAkhir);
+                }
+                return true;
+            });
+        });
+    </script>
 @endpush

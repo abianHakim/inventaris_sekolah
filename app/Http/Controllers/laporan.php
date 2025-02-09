@@ -4,14 +4,16 @@ namespace App\Http\Controllers;
 
 use App\Models\tm_barang_inventaris;
 use App\Models\tm_pengembalian;
+use App\Models\tr_jenis_barang;
 use Illuminate\Http\Request;
 
 class laporan extends Controller
 {
     public function laporanbarang()
     {
-        $barang = tm_barang_inventaris::where('br_status', 1)->get();
-        return view("super_user.laporan.barangtersedia", compact("barang"));
+        $barang = tm_barang_inventaris::with('jenisBarang')->where('br_status', 1)->get();
+        $jenisBarang = tr_jenis_barang::all();
+        return view("super_user.laporan.barangtersedia", compact("barang", "jenisBarang"));
     }
 
     public function pengembalian()
