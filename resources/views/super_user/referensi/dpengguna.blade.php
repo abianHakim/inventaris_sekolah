@@ -5,6 +5,21 @@
         table td {
             vertical-align: middle !important;
         }
+
+        .d-flex button {
+            height: 36px;
+            line-height: 0px;
+
+        }
+
+        .d-flex button {
+            padding: 0.375rem 0.75rem;
+
+        }
+
+        .d-flex button {
+            margin-top: 10px;
+        }
     </style>
 @endpush
 
@@ -41,20 +56,22 @@
                                     </span>
                                 </td>
                                 <td>
-                                    <button class="btn btn-info btn-sm btnEdit" data-id="{{ $user->user_id }}"
-                                        data-name="{{ $user->user_name }}" data-hak="{{ $user->user_hak }}"
-                                        data-status="{{ $user->user_sts }}">
-                                        <i class="fas fa-edit"></i> Edit
-                                    </button>
-                                    {{-- <form action="{{ route('dpengguna.destroy', $user->user_id) }}" method="POST"
-                                        class="d-inline"> --}}
-                                    <form action="#" method="POST" class="d-inline">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-danger btn-sm">
-                                            <i class="fas fa-trash"></i> Hapus
+                                    <div class="d-flex justify-content-start ">
+                                        <button class="btn btn-info btn-sm btnEdit mr-2" data-id="{{ $user->user_id }}"
+                                            data-name="{{ $user->user_name }}" data-hak="{{ $user->user_hak }}"
+                                            data-status="{{ $user->user_sts }}">
+                                            <i class="fas fa-edit"></i> Edit
                                         </button>
-                                    </form>
+
+                                        <form class="d-flex deleteForm"
+                                            action="{{ route('dpengguna.destroy', $user->user_id) }}" method="POST">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-danger btn-sm">
+                                                <i class="fas fa-trash"></i> Hapus
+                                            </button>
+                                        </form>
+                                    </div>
                                 </td>
                             </tr>
                         @endforeach
@@ -113,6 +130,7 @@
 
 @push('script')
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {
@@ -121,21 +139,19 @@
             const modalTitle = document.getElementById("modalUserTitle");
             const btnTambah = document.getElementById("btnTambah");
 
-            // Untuk tombol tambah pengguna
+            // Tambah Pengguna
             btnTambah.addEventListener("click", function() {
                 formUser.reset();
                 formUser.action = "{{ route('dpengguna.store') }}";
-                formUser.method = "POST";
                 modalTitle.innerText = "Tambah Pengguna";
 
-                // Hapus input _method jika ada (untuk memastikan POST)
                 const methodInput = formUser.querySelector("input[name='_method']");
                 if (methodInput) methodInput.remove();
 
                 document.getElementById("user_pass").required = true;
             });
 
-            // Untuk tombol edit pengguna
+            // Edit Pengguna
             document.querySelectorAll(".btnEdit").forEach(button => {
                 button.addEventListener("click", function() {
                     const id = this.getAttribute("data-id");
@@ -143,19 +159,16 @@
                     const hak = this.getAttribute("data-hak");
                     const status = this.getAttribute("data-status");
 
-                    formUser.action = `/dpengguna/${id}`;
-                    formUser.method = "POST";
+                    formUser.action = `/superdpengguna/${id}`;
                     modalTitle.innerText = "Edit Pengguna";
 
-                    // Hapus input _method jika sudah ada sebelumnya
                     const existingMethodInput = formUser.querySelector("input[name='_method']");
                     if (existingMethodInput) existingMethodInput.remove();
 
-                    // Tambahkan _method=PUT
                     const methodInput = document.createElement("input");
                     methodInput.type = "hidden";
                     methodInput.name = "_method";
-                    methodInput.value = "PUT";
+                    methodInput.value = "PATCH";
                     formUser.appendChild(methodInput);
 
                     document.getElementById("user_id").value = id;
@@ -168,12 +181,12 @@
                 });
             });
 
-            // Menangani aksi setelah form disubmit
+            // Simpan Data (Tambah/Edit)
             formUser.addEventListener("submit", function(e) {
                 e.preventDefault();
                 let formData = new FormData(formUser);
                 let action = formUser.action;
-                let method = formUser.method;
+                let method = formUser.querySelector("input[name='_method']") ? "POST" : "POST";
 
                 fetch(action, {
                         method: method,
@@ -182,55 +195,59 @@
                     .then(response => response.json())
                     .then(data => {
                         if (data.success) {
-                            // Tampilkan SweetAlert jika berhasil
                             Swal.fire({
                                 icon: 'success',
                                 title: 'Berhasil!',
                                 text: 'Data pengguna berhasil disimpan.',
-                                confirmButtonText: 'Ok',
-                                timer: 2000
+                                timer: 1500,
+                                showConfirmButton: false
                             }).then(() => {
                                 modalUser.hide();
                                 location.reload();
                             });
                         }
-                    })
-                    .catch(error => {
-                        console.log(error);
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Oops!',
-                            text: 'Terjadi kesalahan. Coba lagi nanti.',
-                            timer: 2000
-                        });
                     });
             });
 
-            // Untuk menangani tombol hapus
-            document.querySelectorAll(".btn-danger").forEach(button => {
-                button.addEventListener("click", function(event) {
-                    event.preventDefault(); // Mencegah form langsung dieksekusi
+            // Hapus Pengguna
+            document.addEventListener("DOMContentLoaded", function() {
+                document.querySelectorAll(".deleteForm").forEach(form => {
+                    form.addEventListener("submit", function(event) {
+                        event.preventDefault(); // Mencegah form dikirim langsung
 
-                    const form = this.closest("form"); // Ambil form terdekat
-                    const userId = this.closest('tr').querySelector('.btnEdit').getAttribute(
-                        'data-id');
-
-                    Swal.fire({
-                        icon: 'warning',
-                        title: 'Apakah Anda yakin?',
-                        text: 'Data ini akan dihapus!',
-                        showCancelButton: true,
-                        confirmButtonText: 'Hapus',
-                        cancelButtonText: 'Batal',
-                        reverseButtons: true
-                    }).then(result => {
-                        if (result.isConfirmed) {
-                            form.submit();
-                        }
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Apakah Anda yakin?',
+                            text: 'Data ini akan dihapus!',
+                            showCancelButton: true,
+                            confirmButtonText: 'Hapus',
+                            cancelButtonText: 'Batal',
+                            reverseButtons: true
+                        }).then(result => {
+                            if (result.isConfirmed) {
+                                fetch(form.action, {
+                                        method: 'POST',
+                                        body: new FormData(form)
+                                    }).then(response => response.json())
+                                    .then(data => {
+                                        if (data.success) {
+                                            Swal.fire({
+                                                icon: 'success',
+                                                title: 'Berhasil!',
+                                                text: 'Data pengguna berhasil dihapus.',
+                                                timer: 1500,
+                                                showConfirmButton: false
+                                            }).then(() => {
+                                                location
+                                                    .reload();
+                                            });
+                                        }
+                                    });
+                            }
+                        });
                     });
                 });
             });
-
         });
     </script>
 @endpush

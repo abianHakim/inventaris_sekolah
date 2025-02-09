@@ -1,6 +1,45 @@
 @extends('template.su')
 
 @push('style')
+    <style>
+        table td {
+            vertical-align: middle !important;
+        }
+
+        .custom-btn {
+            padding: 10px 15px;
+        }
+
+        .btn-sm {
+            margin: 0;
+        }
+
+        form {
+            margin-bottom: 0 !important;
+        }
+
+        .btn-icon-split .text {
+            margin-right: 5px;
+        }
+
+        .btn-icon-split .icon {
+            display: flex;
+            align-items: center;
+        }
+
+        .btn:hover {
+            opacity: 0.85;
+            cursor: pointer;
+        }
+
+        .btn-info:hover {
+            background-color: #17a2b8;
+        }
+
+        .btn-danger:hover {
+            background-color: #dc3545;
+        }
+    </style>
 @endpush
 
 
@@ -9,6 +48,13 @@
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mb-0" style="color: black">Daftar Barang</h1>
     </div>
+
+    <a href="{{ route('pbarang') }}" class="btn btn-primary btn-icon-split mb-4">
+        <span class="text">Tambah Jenis Barang</span>
+        <span class="icon text-white-50">
+            <i class="fas fa-plus"></i>
+        </span>
+    </a>
 
     <div class="card shadow mb-4">
         <div class="card-header py-3">
@@ -176,6 +222,7 @@
 </div>
 
 @push('script')
+
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>

@@ -60,6 +60,8 @@ Route::delete('superjbarang/{jns_brg_kode}', [TrJenisBarangController::class, 'd
 //daftar pengguna
 Route::get('superdpengguna', [daftarPengguna::class, 'index'])->name('dpengguna');
 Route::post('superdpengguna', [daftarPengguna::class, 'store'])->name('dpengguna.store');
+Route::patch('superdpengguna/{id}', [DaftarPengguna::class, 'update'])->name('dpengguna.update');
+Route::delete('superdpengguna/{id}', [DaftarPengguna::class, 'destroy'])->name('dpengguna.destroy');
 
 
 //data siswa

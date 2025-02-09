@@ -80,8 +80,8 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label for="siswa">Pilih Siswa:</label>
-                            <select name="siswa_id" class="form-control" required>
-                                <option value="">-- Pilih Siswa --</option>
+                            <select name="siswa_id" id="select-siswa" class="form-control select2" required>
+                                <option value="">Pilih Siswa</option>
                                 @foreach ($siswa as $s)
                                     <option value="{{ $s->siswa_id }}">{{ $s->nama_siswa }}</option>
                                 @endforeach
@@ -90,7 +90,7 @@
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label for="penanggung_jawab">Penanggung Jawab:</label>
+                            <label for="penanggung_jawab">Penanggung Jawab</label>
                             <input type="text" class="form-control" value="{{ Auth::user()->user_name }}" disabled>
                             <input type="hidden" name="user_id" value="{{ Auth::id() }}">
                         </div>
@@ -103,7 +103,7 @@
                         <h6 class="m-0 font-weight-bold text-primary">Pilih Barang</h6>
                     </div>
                     <div class="card-body">
-                        <table class="table table-bordered">
+                        <table class="table table-bordered" id="dataTable">
                             <thead>
                                 <tr>
                                     <th>Nama Barang</th>
@@ -159,6 +159,18 @@
 @endsection
 
 @push('script')
+    <script>
+        $(document).ready(function() {
+            $('#select-siswa').select2({
+                placeholder: " Pilih Siswa ",
+                allowClear: true,
+                width: '100%',
+                dropdownParent: $('#select-siswa')
+                    .parent()
+            });
+        });
+    </script>
+
     <script>
         let selectedBarang = [];
 
