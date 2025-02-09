@@ -107,6 +107,7 @@
                             <thead>
                                 <tr>
                                     <th>Nama Barang</th>
+                                    <th>Kategori</th>
                                     <th>Status</th>
                                     <th>Pilih</th>
                                 </tr>
@@ -115,6 +116,7 @@
                                 @foreach ($barang as $b)
                                     <tr>
                                         <td>{{ $b->br_nama }}</td>
+                                        <td>{{ $b->jenisbarang->jns_brg_nama }}</td>
                                         <td>
                                             <span class="badge badge-{{ $b->br_status == 1 ? 'success' : 'danger' }}">
                                                 {{ $b->getStatusLabelAttribute() }}

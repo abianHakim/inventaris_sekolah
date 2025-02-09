@@ -8,6 +8,7 @@ use App\Models\tm_barang_inventaris;
 use App\Models\tm_peminjaman;
 use App\Http\Requests\Storetm_peminjamanRequest;
 use App\Http\Requests\Updatetm_peminjamanRequest;
+use App\Models\tr_jenis_barang;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -31,7 +32,7 @@ class TmPeminjamanController extends Controller
     {
         $peminjaman = tm_peminjaman::with(['siswa', 'user', 'detailPeminjaman.barang'])->get();
         $siswa = siswa::all();
-        $barang = tm_barang_inventaris::where('br_status', 1)->get();
+        $barang = tm_barang_inventaris::with('jenisBarang')->where('br_status', 1)->get();
         return view('super_user.peminjaman_barang.transaksi', compact('peminjaman', 'siswa', 'barang'));
     }
 
