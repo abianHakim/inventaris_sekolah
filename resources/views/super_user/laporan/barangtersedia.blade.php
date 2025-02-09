@@ -62,7 +62,6 @@
         #global-search {
             border-radius: 5px;
         }
-        
     </style>
 @endpush
 
@@ -103,7 +102,7 @@
                     {{-- <table> --}}
                     <thead>
                         <tr>
-                            <th>kode</th>
+                            <th>Kode Barang</th>
                             <th>Nama Barang</th>
                             <th>Jenis Barang</th>
                             <th>Tanggal Terima</th>
@@ -168,77 +167,31 @@
                         extend: 'excel',
                         text: '<i class="fas fa-file-excel"></i> Excel',
                         className: 'btn btn-success',
-                        title: 'Barang Tersedia',
-                        customizeData: function(data) {
-                            // Menjadikan teks header lebih terlihat
-                            data.header.forEach(function(header, index) {
-                                data.header[index] = header.toUpperCase();
-                            });
-                        }
+                        title: 'Laporan Status Barang'
                     },
                     {
                         extend: 'pdf',
                         text: '<i class="fas fa-file-pdf"></i> PDF',
                         className: 'btn btn-danger',
-                        title: 'Barang Tersedia',
-                        customize: function(doc) {
-                            // Mengatur warna header tabel pada PDF
-                            doc.styles.tableHeader = {
-                                fillColor: '#007bff', // Warna header
-                                color: 'white', // Warna teks header
-                                alignment: 'center',
-                                bold: true
-                            };
-
-                            // Memastikan semua header dalam tabel mendapatkan warna
-                            doc.content[1].table.headerRows = 1;
-                            doc.content[1].table.body[0].forEach(function(header) {
-                                header.fillColor = '#007bff'; // Warna latar belakang header
-                                header.color = 'white'; // Warna teks header
-                            });
-
-                            // Menyesuaikan margin dokumen
-                            doc.pageMargins = [20, 20, 20, 20];
-                        }
+                        title: 'Laporan Status Barang'
                     },
                     {
                         extend: 'print',
                         text: '<i class="fas fa-print"></i> Print',
                         className: 'btn btn-info',
-                        title: 'Barang Tersedia',
-                        customize: function(win) {
-                            $(win.document.body).css('font-size', '14px');
-                            $(win.document.body).find('table').addClass('display').css('width',
-                                '100%');
-
-                            // Menambahkan styling CSS agar warna tetap ada di print
-                            var css = '@media print {' +
-                                'thead th { background-color: #007bff !important; color: white !important; }' +
-                                '}';
-                            var head = win.document.head || win.document.getElementsByTagName(
-                                'head')[0];
-                            var style = win.document.createElement('style');
-                            style.type = 'text/css';
-                            style.media = 'print';
-                            if (style.styleSheet) {
-                                style.styleSheet.cssText = css;
-                            } else {
-                                style.appendChild(win.document.createTextNode(css));
-                            }
-                            head.appendChild(style);
-                        }
+                        title: 'Laporan Status Barang'
                     },
                     {
                         extend: 'csv',
                         text: '<i class="fas fa-file-csv"></i> CSV',
                         className: 'btn btn-primary',
-                        title: 'Barang Tersedia'
+                        title: 'Laporan Status Barang'
                     },
                     {
                         extend: 'copy',
                         text: '<i class="fas fa-copy"></i> Copy',
                         className: 'btn btn-secondary',
-                        title: 'Barang Tersedia'
+                        title: 'Laporan Status Barang'
                     },
                     {
                         extend: 'colvis',
@@ -247,6 +200,7 @@
                     }
                 ]
             });
+
 
             $('#global-search').on('keyup', function() {
                 table.search(this.value).draw();
