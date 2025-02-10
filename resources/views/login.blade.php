@@ -22,7 +22,7 @@
 
     <style>
         body {
-            background: linear-gradient(to right, #16787d, #144515);
+            background: linear-gradient(to right, #2c595c, #2b702d);
             display: flex;
             align-items: center;
             justify-content: center;

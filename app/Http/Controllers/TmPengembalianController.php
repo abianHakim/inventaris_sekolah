@@ -67,6 +67,6 @@ class TmPengembalianController extends Controller
 
         // Flash message dan redirect ke daftar peminjaman
         session()->flash('success', 'Barang berhasil dikembalikan!');
-        return redirect()->route('peminjaman.index');
+        return redirect()->route('pebarang');
     }
 }

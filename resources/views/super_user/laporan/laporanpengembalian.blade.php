@@ -120,13 +120,16 @@
         </div>
         <div class="card-body">
             <div class="row mb-3">
-                <div class="col-md-6">
+                <div class="col-md-5">
                     <label for="filter-tanggal-awal">📅 Dari Tanggal:</label>
                     <input type="date" id="filter-tanggal-awal" class="form-control">
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-5">
                     <label for="filter-tanggal-akhir">📅 Sampai Tanggal:</label>
                     <input type="date" id="filter-tanggal-akhir" class="form-control">
+                </div>
+                <div class="col-md-2 d-flex align-items-end">
+                    <button id="reset-filter" class="btn btn-warning w-100"><i class="fas fa-sync-alt"></i> Reset</button>
                 </div>
             </div>
 
@@ -275,6 +278,12 @@
                         className: 'btn btn-warning'
                     }
                 ]
+            });
+
+            $('#reset-filter').on('click', function() {
+                $('#filter-tanggal-awal').val('');
+                $('#filter-tanggal-akhir').val('');
+                table.draw();
             });
 
             $('#filter-tanggal-awal, #filter-tanggal-akhir').on('change', function() {
